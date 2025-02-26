@@ -5,5 +5,8 @@
     "login": "Login",
     "username": "Username",
     "password": "Password",
-    "login_failed": "Login failed"
+    "login_failed": "Login failed",
+
+    "@@comment": "Settings",
+    "language": "Language"
 }

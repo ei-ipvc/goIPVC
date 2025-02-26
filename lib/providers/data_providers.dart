@@ -6,6 +6,8 @@ import 'package:goipvc/models/lesson.dart';
 import 'package:goipvc/models/student.dart';
 import 'package:goipvc/models/tuition_fee.dart';
 import 'package:goipvc/services/data_service.dart';
+import 'package:goipvc/services/server_service.dart';
+import 'package:goipvc/services/language_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final dataServiceProvider = Provider<DataService>((ref) {
@@ -24,6 +26,16 @@ final prefsProvider = FutureProvider<Map<String, String?>>((ref) async {
     'sas_refresh_token': prefs.getString('sas_refresh_token'),
     'academicos_token': prefs.getString('academicos_token'),
   };
+});
+
+final languageProvider = StateNotifierProvider<LanguageNotifier, LanguageState>((ref) {
+  return LanguageNotifier();
+});
+
+final serverUrlProvider = StateNotifierProvider<ServerUrlNotifier, ServerUrlState>((ref) {
+  return ServerUrlNotifier(
+    initialUrl: 'https://api.goipvc.xyz',
+  );
 });
 
 final firstNameProvider = FutureProvider<String>((ref) async {

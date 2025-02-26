@@ -5,5 +5,9 @@
     "login": "Entrar",
     "username": "Nome de utilizador",
     "password": "Palavra-passe",
-    "login_failed": "Falha no login"
+    "login_failed": "Falha no login",
+
+
+    "@@comment": "Settings",
+    "language": "Língua"
 }

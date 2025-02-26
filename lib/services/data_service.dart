@@ -1,3 +1,5 @@
+// File: lib/services/data_service.dart
+
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:goipvc/utils/shared_prefs.dart';
-
 import '../main.dart';
 import '../providers/data_providers.dart';
 import '../models/lesson.dart';
@@ -17,9 +18,11 @@ class DataService {
   final Ref ref;
   DataService(this.ref);
 
+  String get serverUrl => ref.read(serverUrlProvider).url;
+
   Future<void> _refreshToken(String url) async {
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = Uri.parse(url).origin;
+    final serverOrigin = Uri.parse(serverUrl).origin;
 
     String tokenType = '';
     final username = prefs['username'] ?? '';
@@ -36,7 +39,7 @@ class DataService {
     }
 
     final response = await http.post(
-      Uri.parse('$serverUrl/auth'),
+      Uri.parse('$serverOrigin/auth'),
       body: {
         'username': username,
         'password': password,
@@ -47,7 +50,7 @@ class DataService {
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       final SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
+      await SharedPreferences.getInstance();
 
       await SharedPrefsUtil.printPrefs();
       if (tokenType == 'sas') {
@@ -93,7 +96,7 @@ class DataService {
 
   Future<String?> getFirstName() async {
     final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     var firstName = sharedPreferences.getString('first_name');
 
     if (firstName != null && firstName != "Unauthorized") {
@@ -101,7 +104,6 @@ class DataService {
     }
 
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final onToken = prefs['on_token'] ?? '';
 
     final response = await request(
@@ -118,7 +120,7 @@ class DataService {
 
   Future<String> getBalance() async {
     final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     var balance = sharedPreferences.getString('balance');
 
     if (balance != null) {
@@ -126,7 +128,6 @@ class DataService {
     }
 
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final sasToken = prefs['sas_token'] ?? '';
     final sasRefreshToken = prefs['sas_refresh_token'] ?? '';
 
@@ -147,7 +148,7 @@ class DataService {
 
   Future<int> getStudentId() async {
     final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     var studentId = sharedPreferences.getInt('student_id');
 
     if (studentId != null) {
@@ -155,7 +156,6 @@ class DataService {
     }
 
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final sasToken = prefs['sas_token'] ?? '';
     final sasRefreshToken = prefs['sas_refresh_token'] ?? '';
 
@@ -176,8 +176,9 @@ class DataService {
 
   Future<List<Lesson>> getLessons(int studentId) async {
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final onToken = prefs['on_token'] ?? '';
+
+    print(serverUrl);
 
     final response = await request(
       'POST',
@@ -195,7 +196,6 @@ class DataService {
 
   Future<Student> getStudentInfo() async {
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final academicosToken = prefs['academicos_token'] ?? 'JSESSIONID=...';
 
     final response = await request(
@@ -224,7 +224,6 @@ class DataService {
 
   Future<CurricularUnit> getCurricularUnit(int curricularUnitId) async {
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final academicosToken = prefs['academicos_token'] ?? '';
 
     final response = await request(
@@ -239,7 +238,6 @@ class DataService {
 
   Future<List<CurricularUnit>> getCurricularUnits() async {
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final academicosToken = prefs['academicos_token'] ?? '';
 
     final response = await request(
@@ -254,7 +252,6 @@ class DataService {
 
   Future<List<TuitionFee>> getTuitionFees() async {
     final prefs = await ref.read(prefsProvider.future);
-    final serverUrl = prefs['server_url'] ?? '';
     final academicosToken = prefs['academicos_token'] ?? '';
 
     final response = await request(

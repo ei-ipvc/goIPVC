@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 class SharedPrefsUtil {
   static final Logger logger = Logger();
 
-  static Future<void> initializeDefaults() async {
+  static Future<SharedPreferences> initializeDefaults() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (!prefs.containsKey('theme')) {
@@ -19,7 +19,13 @@ class SharedPrefsUtil {
       await prefs.setString('school_theme', 'IPVC');
     }
 
+    if (!prefs.containsKey('server_url')) {
+      await prefs.setString('server_url', 'https://api.goipvc.xyz');
+    }
+
     SharedPrefsUtil.printPrefs();
+
+    return prefs;
   }
 
 

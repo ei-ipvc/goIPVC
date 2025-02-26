@@ -1,43 +1,31 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:goipvc/ui/widgets/settings/language_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
 import 'package:goipvc/generated/l10n.dart';
-import 'package:goipvc/ui/widgets/containers.dart';
+import 'package:goipvc/providers/data_providers.dart';
+import 'package:goipvc/ui/widgets/settings/server_tile.dart';
 import '../init_view.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<LoginScreen> {
+class LoginState extends ConsumerState<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _serverController = TextEditingController();
-  final FocusNode _serverFocusNode = FocusNode();
-  Color _serverBorderColor = Colors.grey;
   bool _isLoggingIn = false;
   String? _usernameError;
   String? _passwordError;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadServerUrl();
-  }
-
-  Future<void> _loadServerUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? savedServerUrl = prefs.getString('server_url');
-    _serverController.text = savedServerUrl ?? 'https://api.goipvc.xyz';
-  }
 
   Future<void> _login() async {
     setState(() {
@@ -66,29 +54,28 @@ class LoginState extends State<LoginScreen> {
 
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-    final String serverUrl = _serverController.text;
+    final String serverUrl = ref.read(serverUrlProvider).url;
 
     String? errorMessage;
 
     try {
       final response = await http
           .post(
-            Uri.parse('$serverUrl/auth'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, String>{
-              'username': username,
-              'password': password,
-              'on': 'true',
-              'sas': 'true',
-            }),
-          )
+        Uri.parse('$serverUrl/auth'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'password': password,
+          'on': 'true',
+          'sas': 'true',
+        }),
+      )
           .timeout(const Duration(seconds: 15));
 
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('server_url', serverUrl);
         await prefs.setBool('is_logged_in', true);
         await prefs.setString('username', username);
         await prefs.setString('password', password);
@@ -106,8 +93,6 @@ class LoginState extends State<LoginScreen> {
               pageBuilder: (context, animation, secondaryAnimation) {
                 return InitView();
               },
-
-              //Transition
               transitionDuration: const Duration(milliseconds: 500),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
@@ -145,71 +130,6 @@ class LoginState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _pingServer() async {
-    final String serverUrl = _serverController.text;
-
-    try {
-      final response = await http
-          .get(Uri.parse(serverUrl))
-          .timeout(const Duration(seconds: 5));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _serverBorderColor = Colors.green;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _serverBorderColor = Colors.red;
-      });
-    }
-  }
-
-  void _showServerSettings(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _serverController,
-                focusNode: _serverFocusNode,
-                decoration: InputDecoration(
-                  labelText: "Server:",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _serverBorderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _serverBorderColor),
-                  ),
-                ),
-                autocorrect: false,
-              ),
-            ],
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: _pingServer,
-                  child: Text("Test"),
-                ),
-                TextButton(
-                    onPressed: () {
-                      setState(() {});
-                      Navigator.pop(context);
-                    },
-                    child: Text("Save")),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
 
   void _showQuickSettings(BuildContext context) {
     showDialog(
@@ -217,26 +137,15 @@ class LoginState extends State<LoginScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           insetPadding: const EdgeInsets.all(4),
-          title: Text("Settings"),
-          content: SizedBox(
+          title: const Text("Settings"),
+          content: const SizedBox(
             width: double.maxFinite,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ListTile(
-                  leading: const Icon(Icons.dns),
-                  title: const Text("Server"),
-                  trailing: ValueListenableBuilder<TextEditingValue>(
-                    valueListenable: _serverController,
-                    builder: (context, value, child) {
-                      return TextContainer(text: value.text);
-                    },
-                  ),
-                  onTap: () {
-                    _showServerSettings(context);
-                  },
-                )
+                LanguageTile(),
+                ServerTile(),
               ],
             ),
           ),
@@ -245,7 +154,7 @@ class LoginState extends State<LoginScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("Close")),
+                child: const Text("Close")),
           ],
         );
       },

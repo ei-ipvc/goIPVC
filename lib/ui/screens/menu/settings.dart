@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:goipvc/ui/widgets/settings/language_tile.dart';
+import 'package:goipvc/ui/widgets/settings/server_tile.dart';
 import 'package:goipvc/ui/widgets/dropdown.dart';
 import 'package:goipvc/ui/widgets/list_section.dart';
-import 'package:goipvc/ui/widgets/containers.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -261,24 +261,7 @@ class PreferenceSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListSection(title: "Preferences", children: [
-      ListTile(
-        leading: Icon(Icons.language),
-        title: Text("Lingua"),
-        trailing: Dropdown<String>(
-          value: "pt",
-          items: [
-            DropdownMenuItem<String>(
-              value: "pt",
-              child: Text("Portugues"),
-            ),
-            DropdownMenuItem<String>(
-              value: "en",
-              child: Text("English"),
-            ),
-          ],
-          onChanged: (String? value) {  },
-        ),
-      ),
+      LanguageTile()
     ]);
   }
 }
@@ -291,93 +274,10 @@ class ExtraSettings extends StatefulWidget {
 }
 
 class ExtraSettingsState extends State<ExtraSettings>{
-  final TextEditingController _serverController =
-    TextEditingController(text: 'https://api.goipvc.xyz');
-  final FocusNode _serverFocusNode = FocusNode();
-  Color _serverBorderColor = Colors.grey;
-
-  Future<void> _pingServer() async {
-    final String serverUrl = _serverController.text;
-
-    try {
-      final response = await http
-          .get(Uri.parse(serverUrl))
-          .timeout(Duration(seconds: 5));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _serverBorderColor = Colors.green;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _serverBorderColor = Colors.red;
-      });
-    }
-  }
-
-  void _showServerSettings(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _serverController,
-                focusNode: _serverFocusNode,
-                decoration: InputDecoration(
-                  labelText: "Server:",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _serverBorderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _serverBorderColor),
-                  ),
-                ),
-                autocorrect: false,
-              ),
-            ],
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: _pingServer,
-                  child: Text("Test"),
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Save")
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListSection(title: "Extra", children: [
-      ListTile(
-        leading: Icon(Icons.dns),
-        title: Text("Server"),
-        trailing: ValueListenableBuilder<TextEditingValue>(
-          valueListenable: _serverController,
-          builder: (context, value, child) {
-            return TextContainer(text: value.text);
-          },
-        ),
-        onTap: () {
-          _showServerSettings(context);
-        },
-      ),
+      ServerTile(),
       ListTile(
         leading: Icon(
           Icons.delete_forever,

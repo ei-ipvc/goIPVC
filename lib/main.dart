@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:goipvc/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'generated/l10n.dart';
 import 'package:logger/logger.dart';
 
+import 'package:goipvc/services/server_service.dart';
+import 'package:goipvc/providers/data_providers.dart';
+import 'package:goipvc/themes.dart';
 import 'utils/shared_prefs.dart';
 
 import 'ui/init_view.dart';
 import 'ui/screens/login.dart';
 
-import 'package:dynamic_color/dynamic_color.dart';
+final serverUrlNotifierProvider = StateNotifierProvider<ServerUrlNotifier, ServerUrlState>(
+      (ref) => ServerUrlNotifier(initialUrl: 'https://api.goipvc.xyz'), // Default will be overridden
+);
 
 final Logger logger = Logger();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SharedPrefsUtil.initializeDefaults();
+
+  SharedPreferences prefs = await SharedPrefsUtil.initializeDefaults();
+  final savedUrl = prefs.getString('server_url') ?? 'https://api.goipvc.xyz';
+
+  final container = ProviderContainer(
+    overrides: [
+      serverUrlNotifierProvider.overrideWith(
+            (ref) => ServerUrlNotifier(initialUrl: savedUrl),
+      ),
+    ],
+  );
+
   runApp(
     ProviderScope(
       child: MyApp(),
@@ -26,7 +42,7 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   Future<Map<String, dynamic>> _getAppData() async {
@@ -46,7 +62,9 @@ class MyApp extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final languageState = ref.watch(languageProvider);
+
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return FutureBuilder<Map<String, dynamic>>(
@@ -79,6 +97,7 @@ class MyApp extends StatelessWidget {
                 SfGlobalLocalizations.delegate
               ],
               supportedLocales: S.delegate.supportedLocales,
+              locale: languageState.locale,
               theme: _buildTheme(
                 lightDynamic,
                 Brightness.light,
