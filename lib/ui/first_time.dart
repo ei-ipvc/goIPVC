@@ -194,41 +194,41 @@ class ThemePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                "Aparência",
-                style: Theme.of(context).textTheme.headlineSmall,
-              )
-          ),
-          ListTile(
-            leading: Icon(Icons.brightness_medium),
-            title: Text("Tema"),
-            trailing: Dropdown<String>(
-              value: "system",
-              items: [
-                DropdownMenuItem<String>(
-                  value: "system",
-                  child: Text("Sistema"),
-                ),
-                DropdownMenuItem<String>(
-                  value: "dark",
-                  child: Text("Escuro"),
-                ),
-                DropdownMenuItem<String>(
-                  value: "light",
-                  child: Text("Claro"),
-                ),
-              ],
-              onChanged: (String? value) {  },
-            ),
-          ),
-        ],
-      ),
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+        Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          S.of(context).appearance,
+          style: Theme.of(context).textTheme.headlineSmall,
+        )
+    ),
+    ListTile(
+    leading: Icon(Icons.brightness_medium),
+    title: Text(S.of(context).theme),
+    trailing: Dropdown<String>(
+    value: "system",
+    items: [
+    DropdownMenuItem<String>(
+    value: "system",
+    child: Text(S.of(context).system),
+    ),
+    DropdownMenuItem<String>(
+    value: "dark",
+    child: Text(S.of(context).dark),
+    ),
+    DropdownMenuItem<String>(
+    value: "light",
+    child: Text(S.of(context).light,
+    ),
+    ],
+    onChanged: (String? value) {  },
+    ),
+    ),
+    ],
+    ),
     );
   }
 }
@@ -246,13 +246,13 @@ class NotificationsPage extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                "Notificações",
+                S.of(context).notifications,
                 style: Theme.of(context).textTheme.headlineSmall,
               )
           ),
           SwitchListTile(
             secondary: const Icon(Icons.notifications_on),
-            title: Text("Notificações"),
+            title: Text(S.of(context).notifications),
             value: true,
             onChanged: (value) {},
           ),

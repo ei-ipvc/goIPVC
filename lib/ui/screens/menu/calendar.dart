@@ -8,7 +8,7 @@ class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Calendário Académico")),
+        appBar: AppBar(title: Text(S.of(context).academic_calendar)),
         body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 6),
             child: ListView(

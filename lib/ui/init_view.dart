@@ -68,22 +68,22 @@ class _InitViewState extends State<InitView> {
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
-            label: 'Inicio',
+            label: S.of(context).home,
           ),
           NavigationDestination(
             icon: Icon(Icons.calendar_month_outlined),
             selectedIcon: Icon(Icons.calendar_month),
-            label: 'Horário',
+            label: S.of(context).schedule,
           ),
           NavigationDestination(
             icon: Icon(Icons.map_outlined),
             selectedIcon: Icon(Icons.map),
-            label: 'Plantas',
+            label: S.of(context).blueprints,
           ),
           NavigationDestination(
             icon: Icon(Icons.menu_outlined),
             selectedIcon: Icon(Icons.menu),
-            label: 'Menu',
+            label: S.of(context).menu,
           ),
         ],
       ),

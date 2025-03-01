@@ -263,7 +263,7 @@ class NextClasses extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilledCard(
       icon: Icons.browse_gallery,
-      title: 'Próximas Aulas',
+      title: S.of(context).next_classes,
       children: children,
     );
   }

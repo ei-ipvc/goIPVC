@@ -13,7 +13,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text(S.of(context).profile),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -50,17 +50,17 @@ class ProfileScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: Icon(Icons.email),
-                title: Text('Email'),
+                title: Text(S.of(context).email),
                 subtitle: Text(info.email),
               ),
               ListTile(
                 leading: Icon(Icons.school),
-                title: Text('Curso'),
+                title: Text(S.of(context).course),
                 subtitle: Text(info.course),
               ),
               ListTile(
                 leading: Icon(Icons.apartment),
-                title: Text('Escola'),
+                title: Text(S.of(context).school),
                 subtitle: Text(info.schoolName),
               ),
             ],

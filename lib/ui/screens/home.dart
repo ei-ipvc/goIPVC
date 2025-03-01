@@ -25,7 +25,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     final firstNameAsync = ref.watch(firstNameProvider);
     final balanceAsync = ref.watch(balanceProvider);
 
-    final firstName = firstNameAsync.value ?? 'utilizador';
+    final firstName = firstNameAsync.value ?? S.of(context).user;
     final balance = balanceAsync.value ?? 0.00;
 
     return DefaultTabController(
@@ -35,24 +35,24 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Greeting(
-              title: 'Olá $firstName!',
-              slogan: 'O teu ● de partida',
+              title: '${S.of(context).hello} $firstName!',
+              slogan: S.of(context).slogan,
               money: '$balance €',
-              subtitle: 'Saldo atual',
+              subtitle: S.of(context).current_balance,
             ),
             TabBar(
               tabs: [
                 Tab(
                     icon: Icon(Icons.watch_later),
-                    text: 'Aulas'
+                    text: S.of(context).classes
                 ),
                 Tab(
                     icon: Icon(Icons.task),
-                    text: 'Tarefas'
+                    text: S.of(context).tasks
                 ),
                 Tab(
                     icon: Icon(Icons.local_dining),
-                    text: 'Ementas'
+                    text: S.of(context).meals
                 ),
               ],
             ),

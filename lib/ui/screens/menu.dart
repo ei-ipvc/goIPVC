@@ -25,10 +25,10 @@ class MenuScreen extends ConsumerWidget {
             padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
             child: UserCard(),
           ),
-          ListSection(title: "Geral", children: [
+          ListSection(title: S.of(context).general, children: [
             ListTile(
               leading: Icon(Icons.school),
-              title: Text("Cadeiras"),
+              title: Text(S.of(context).classes),
               onTap: () {
                 Navigator.push(
                     context,
@@ -38,7 +38,7 @@ class MenuScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: Icon(Icons.calendar_month),
-              title: Text("Calendário Académico"),
+              title: Text(S.of(context).academic_calendar),
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CalendarScreen()));
@@ -46,7 +46,7 @@ class MenuScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: Icon(Icons.people),
-              title: Text("Corpo Docente"),
+              title: Text(S.of(context).teachers),
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => TeachersScreen()));
@@ -54,22 +54,22 @@ class MenuScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: Icon(Icons.watch_later),
-              title: Text("Horário de Serviços"),
+              title: Text(S.of(context).services_schedule),
             )
           ]),
-          ListSection(title: "Académicos", children: [
+          ListSection(title: S.of(context).academics, children: [
             ListTile(
               leading: Image.asset(
                 'assets/logos/services/academicos.png',
                 width: 20,
                 height: 20,
               ),
-              title: Text("Académicos"),
+              title: Text(S.of(context).academics),
               trailing: Icon(Icons.launch),
             ),
             ListTile(
               leading: Icon(Icons.local_atm),
-              title: Text("Propinas"),
+              title: Text(S.of(context).tuition_fees),
               onTap: () {
                 Navigator.push(
                     context,
@@ -79,7 +79,7 @@ class MenuScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: Icon(Icons.calendar_today),
-              title: Text("Exames"),
+              title: Text(S.of(context).exams),
             )
           ]),
           ListSection(title: "SASocial", children: [
@@ -94,7 +94,7 @@ class MenuScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: Icon(Icons.credit_card),
-              title: Text("Conta"),
+              title: Text(S.of(context).account),
             )
           ]),
           ListSection(title: "ON", children: [
@@ -123,11 +123,11 @@ class MenuScreen extends ConsumerWidget {
           ListSection(children: [
             ListTile(
               leading: Icon(Icons.info),
-              title: Text("Sobre"),
+              title: Text(S.of(context).about),
             ),
             ListTile(
               leading: Icon(Icons.settings),
-              title: Text("Definições"),
+              title: Text(S.of(context).settings),
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SettingsScreen()));
@@ -135,7 +135,7 @@ class MenuScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: Icon(Icons.logout),
-              title: Text("Logout"),
+              title: Text(S.of(context).logout),
               onTap: () async {
                 ref.invalidate(prefsProvider);
                 ref.invalidate(firstNameProvider);
@@ -175,7 +175,7 @@ class UserCard extends ConsumerWidget {
 
     return FilledCard(
         icon: Icons.person,
-        title: "Perfil",
+        title: S.of(context).profile,
         onTap: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => ProfileScreen()));
@@ -214,7 +214,7 @@ class UserCard extends ConsumerWidget {
               spacing: 4,
               children: [
                 Icon(Icons.error, color: Colors.red),
-                Text('Erro ao carregar informações')
+                Text(S.of(context).error_loading_data),
               ],
             ),
           ),

@@ -18,11 +18,11 @@ class CurricularUnitScreen extends ConsumerWidget {
 
     return curricularUnitAsync.when(
       loading: () => Scaffold(
-        appBar: AppBar(title: Text("Disciplina")),
+        appBar: AppBar(title: Text(S.of(context).curricular_unit)),
         body: Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
-        appBar: AppBar(title: Text("Disciplina")),
+        appBar: AppBar(title: Text(S.of(context).curricular_unit)),
         body: Center(child: Text('Error: $error')),
       ),
       data: (curricularUnit) => _buildContent(context, curricularUnit),
@@ -34,7 +34,7 @@ class CurricularUnitScreen extends ConsumerWidget {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Disciplina"),
+          title: const Text(S.of(context).curricular_unit),
         ),
         body: Column(
           children: [
@@ -63,11 +63,11 @@ class CurricularUnitScreen extends ConsumerWidget {
                             spacing: 4,
                             children: [
                               Chip(
-                                label: Text("PL: -- horas"),
+                                label: Text("PL: -- ${S.of(context).hours}"),
                                 padding: EdgeInsets.symmetric(horizontal: 2),
                               ),
                               Chip(
-                                label: Text("TP: -- horas"),
+                                label: Text("TP: -- ${S.of(context).hours}"),
                                 padding: EdgeInsets.symmetric(horizontal: 2),
                               )
                             ],
@@ -100,10 +100,10 @@ class CurricularUnitScreen extends ConsumerWidget {
             ),
             const TabBar(
                 tabs: [
-                  Tab(icon: Icon(Icons.home), text: 'Geral'),
-                  Tab(icon: Icon(Icons.date_range), text: 'Sumários'),
-                  Tab(icon: Icon(Icons.school), text: 'Programa'),
-                  Tab(icon: Icon(Icons.grading), text: 'Notas'),
+                  Tab(icon: Icon(Icons.home), text: S.of(context).general),
+                  Tab(icon: Icon(Icons.date_range), text: S.of(context).summary),
+                  Tab(icon: Icon(Icons.school), text: S.of(context).program),
+                  Tab(icon: Icon(Icons.grading), text: S.of(context).grades),
                 ]
             )
           ],

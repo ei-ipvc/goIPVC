@@ -21,7 +21,7 @@ class CurricularUnitsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cadeiras"),
+        title: Text(S.of(context).classes),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -41,7 +41,7 @@ class CurricularUnitsScreen extends ConsumerWidget {
                   spacing: 8,
                   children: [
                     OptionChip(
-                      label: "Este Semestre",
+                      label: S.of(context).this_semester,
                       selected: selectedChip == -1,
                       onSelected: (isSelected) {
                         if (isSelected) {
@@ -58,7 +58,7 @@ class CurricularUnitsScreen extends ConsumerWidget {
                       ),
                     ),
                     OptionChip(
-                      label: "Tudo",
+                      label: S.of(context).all,
                       selected: selectedChip == 0,
                       onSelected: (isSelected) {
                         if (isSelected) {
@@ -67,7 +67,7 @@ class CurricularUnitsScreen extends ConsumerWidget {
                       },
                     ),
                     OptionChip(
-                      label: "1º ano",
+                      label: S.of(context).first_year,
                       selected: selectedChip == 1,
                       onSelected: (isSelected) {
                         if (isSelected) {
@@ -76,7 +76,7 @@ class CurricularUnitsScreen extends ConsumerWidget {
                       },
                     ),
                     OptionChip(
-                      label: "2º ano",
+                      label: S.of(context).second_year,
                       selected: selectedChip == 2,
                       onSelected: (isSelected) {
                         if (isSelected) {
@@ -85,7 +85,7 @@ class CurricularUnitsScreen extends ConsumerWidget {
                       },
                     ),
                     OptionChip(
-                      label: "3º ano",
+                      label: S.of(context).third_year,
                       selected: selectedChip == 3,
                       onSelected: (isSelected) {
                         if (isSelected) {
@@ -127,7 +127,7 @@ class CurricularUnitsScreen extends ConsumerWidget {
                     children: [
                       for (var year in unitsByYear.keys)
                         ListSection(
-                          title: "$yearº ano",
+                          title: "$yearº ${S.of(context).year}",
                           children: [
                             for (var curricularUnit in unitsByYear[year]!)
                               CurricularUnitCard(

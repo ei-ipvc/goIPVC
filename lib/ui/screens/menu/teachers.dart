@@ -56,7 +56,7 @@ class TeachersScreenState extends State<TeachersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Corpo Docente"),
+        title: Text(S.of(context).teachers),
       ),
       body: Column(
         children: [

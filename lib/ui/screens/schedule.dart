@@ -417,13 +417,13 @@ class Settings extends StatelessWidget {
                 _buildViewOption(
                   context,
                   icon: Icons.view_day_rounded,
-                  label: 'Dia',
+                  label: S.of(context).day,
                   view: CalendarView.day,
                 ),
                 _buildViewOption(
                   context,
                   icon: Icons.view_week_rounded,
-                  label: 'Semana',
+                  label: S.of(context).week,
                   view: showWeekends.value
                       ? CalendarView.week
                       : CalendarView.workWeek,
@@ -431,7 +431,7 @@ class Settings extends StatelessWidget {
                 _buildViewOption(
                   context,
                   icon: Icons.view_agenda_rounded,
-                  label: 'Mês',
+                  label: S.of(context).month,
                   view: CalendarView.month,
                 ),
               ],
@@ -439,7 +439,7 @@ class Settings extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            "Opções",
+            S.of(context).options,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
@@ -447,7 +447,7 @@ class Settings extends StatelessWidget {
             children: [
               _buildOption(
                 context,
-                label: "Fim de Semana",
+                label: S.of(context).weekend,
                 tailing: ValueListenableBuilder<bool>(
                   valueListenable: showWeekends,
                   builder: (context, value, child) {

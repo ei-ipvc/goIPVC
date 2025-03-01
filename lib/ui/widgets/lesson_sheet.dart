@@ -125,7 +125,7 @@ void showLessonBottomSheet(BuildContext context, Lesson lesson) {
               ListTile(
                 leading: Icon(Icons.book),
                 title: Text(
-                  "Ver cadeira",
+                  S.of(context).lessonDetails,
                   style:
                   TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 ),

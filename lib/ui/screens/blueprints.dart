@@ -18,27 +18,27 @@ class _BlueprintScreenState extends State<BlueprintScreen> {
       index: 1,
       imageUrl: "https://picsum.photos/seed/1/1280/768",
       legend: {
-        "SE": "Saída de Emergência",
-        "S": "Sala de Aula",
-        "L": "Laboratório",
+        "SE": S.of(context).emergency_exit,
+        "S": S.of(context).classroom,
+        "L": S.of(context).lab,
       },
     ),
     Blueprint(
       index: 2,
       imageUrl: "https://picsum.photos/seed/2/1280/768",
       legend: {
-        "AE": "Associação de Estudantes",
-        "WC": "Casas de Banho",
-        "BL": "Biblioteca",
+        "AE": S.of(context).student_association,
+        "WC": S.of(context).wc,
+        "BL": S.of(context).library,
       },
     ),
     Blueprint(
       index: 3,
       imageUrl: "https://picsum.photos/seed/3/1280/768",
       legend: {
-        "SE": "Saída de Emergência",
-        "S": "Sala de Aula",
-        "L": "Laboratório",
+        "SE": S.of(context).emergency_exit,
+        "S": S.of(context).classroom,
+        "L": S.of(context).lab,
       },
     ),
   ];
@@ -55,162 +55,162 @@ class _BlueprintScreenState extends State<BlueprintScreen> {
     final currentBlueprint = blueprints[_currentIndex];
 
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Stack(
-            children: [
-              PhotoView.customChild(
-                backgroundDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface
-                ),
-                minScale: 1.0,
-                maxScale: 10.0,
-                child: Center(
-                  child: Image.network(
-                    currentBlueprint.imageUrl,
-                    fit: BoxFit.contain,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(),
+        body: LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                children: [
+                  PhotoView.customChild(
+                    backgroundDecoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface
+                    ),
+                    minScale: 1.0,
+                    maxScale: 10.0,
+                    child: Center(
+                      child: Image.network(
+                        currentBlueprint.imageUrl,
+                        fit: BoxFit.contain,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  DraggableScrollableSheet(
+                    controller: _sheetController,
+                    initialChildSize: 0.1,
+                    minChildSize: 0.1,
+                    maxChildSize: 0.8,
+                    snap: true,
+                    snapSizes: [0.1, 0.5, 0.8],
+                    builder: (context, scrollController) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainer,
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
+                              blurRadius: 16,
+                            ),
+                          ],
+                        ),
+                        child: ListView(
+                          controller: scrollController,
+                          children: [
+                            Container(
+                              height: 24,
+                              alignment: Alignment.center,
+                              child: Container(
+                                width: 48,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${S.of(context).caption} - ${_currentSchool} ${S.of(context.floor)} ${currentBlueprint.index}',
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: 16),
+                                  ...currentBlueprint.legend.entries.map(
+                                        (entry) => LegendItem(
+                                        abbreviation: entry.key,
+                                        description: entry.value
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),
-                ),
-              ),
 
-              DraggableScrollableSheet(
-                controller: _sheetController,
-                initialChildSize: 0.1,
-                minChildSize: 0.1,
-                maxChildSize: 0.8,
-                snap: true,
-                snapSizes: [0.1, 0.5, 0.8],
-                builder: (context, scrollController) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainer,
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-                          blurRadius: 16,
-                        ),
-                      ],
-                    ),
-                    child: ListView(
-                      controller: scrollController,
-                      children: [
-                        Container(
-                          height: 24,
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: 48,
-                            height: 4,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.outline,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Legenda - ${_currentSchool} Piso ${currentBlueprint.index}',
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 16),
-                              ...currentBlueprint.legend.entries.map(
-                                  (entry) => LegendItem(
-                                      abbreviation: entry.key,
-                                      description: entry.value
-                                  ),
+                  ListenableBuilder(
+                    listenable: _sheetController,
+                    builder: (context, child) {
+                      final sheetHeight = constraints.maxHeight *
+                          (_sheetController.isAttached ? _sheetController.size : 0.1);
+                      return Positioned(
+                        left: 16,
+                        bottom: sheetHeight + 16,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surfaceContainer,
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                                blurRadius: 8,
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-
-              ListenableBuilder(
-                listenable: _sheetController,
-                builder: (context, child) {
-                  final sheetHeight = constraints.maxHeight *
-                      (_sheetController.isAttached ? _sheetController.size : 0.1);
-                  return Positioned(
-                    left: 16,
-                    bottom: sheetHeight + 16,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainer,
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-                            blurRadius: 8,
-                          ),
-                        ],
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Column(
-                            verticalDirection: VerticalDirection.up,
+                          clipBehavior: Clip.antiAlias,
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              for(var (index, blueprint) in blueprints.indexed)
-                                FloorSelector(
-                                  active: _currentIndex == index,
-                                  child: Text(
-                                    "${blueprint.index}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: _currentIndex == index
-                                          ? Theme.of(context).colorScheme.onPrimary
-                                          : Theme.of(context).colorScheme.onSurface,
+                              Column(
+                                verticalDirection: VerticalDirection.up,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  for(var (index, blueprint) in blueprints.indexed)
+                                    FloorSelector(
+                                      active: _currentIndex == index,
+                                      child: Text(
+                                        "${blueprint.index}",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: _currentIndex == index
+                                              ? Theme.of(context).colorScheme.onPrimary
+                                              : Theme.of(context).colorScheme.onSurface,
+                                        ),
+                                      ),
+                                      onTap: () => setState(() => _currentIndex = index),
                                     ),
+                                ],
+                              ),
+                              Container(
+                                height: 20,
+                                alignment: Alignment.center,
+                                child: Container(
+                                  width: 32,
+                                  height: 2,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.surfaceDim,
+                                    borderRadius: BorderRadius.circular(2),
                                   ),
-                                  onTap: () => setState(() => _currentIndex = index),
                                 ),
+                              ),
+                              FloorSelector(
+                                active: false,
+                                child: Icon(Icons.swap_horiz),
+                                onTap: () => setState(() => _currentIndex = 0),
+                              )
                             ],
                           ),
-                          Container(
-                            height: 20,
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: 32,
-                              height: 2,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surfaceDim,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                          ),
-                          FloorSelector(
-                            active: false,
-                            child: Icon(Icons.swap_horiz),
-                            onTap: () => setState(() => _currentIndex = 0),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        }
-      )
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
+        )
     );
   }
 }

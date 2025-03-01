@@ -25,7 +25,7 @@ class TuitionFeesScreen extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Propinas"),
+          title: Text(S.of(context).tuition_fees),
         ),
         body: tuitionFeesAsync.when(
           data: (tuitionFees) {
@@ -43,8 +43,8 @@ class TuitionFeesScreen extends ConsumerWidget {
               children: [
                 TabBar(
                   tabs: [
-                    Tab(icon: Icon(Icons.payments), text: 'Dívidas'),
-                    Tab(icon: Icon(Icons.paid), text: 'Pago'),
+                    Tab(icon: Icon(Icons.payments), text: S.of(context).debt),
+                    Tab(icon: Icon(Icons.paid), text: S.of(context).paid),
                   ],
                 ),
                 Expanded(
@@ -153,14 +153,14 @@ class TuitionFeeCard extends StatelessWidget {
                   ),
                   if (tuitionFee.debt > 0 || tuitionFee.fine > 0)
                     Text(
-                      'Data de vencimento: ${tuitionFee.dueDate}',
+                      '${S.of(context).due_date} : ${tuitionFee.dueDate}',
                       style: TextStyle(
                         color: tuitionFee.fine > 0 ? Colors.white : null,
                       ),
                     ),
                   if (tuitionFee.amountPaid > 0 && tuitionFee.fine == 0)
                     Text(
-                      'Data de pagamento: ${tuitionFee.paymentDate}',
+                      '${S.of(context).payment_date}: ${tuitionFee.paymentDate}',
                       style: TextStyle(
                         color: tuitionFee.fine > 0 ? Colors.white : null,
                       ),
@@ -172,7 +172,7 @@ class TuitionFeeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Valor',
+                      S.of(context).value,
                       style: TextStyle(
                         fontSize: 14,
                         color: tuitionFee.fine > 0 ? Colors.white : null,
@@ -193,7 +193,7 @@ class TuitionFeeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Multa',
+                      S.of(context).fine,
                       style: TextStyle(
                         fontSize: 14,
                         color: tuitionFee.fine > 0 ? Colors.white : null,
@@ -214,7 +214,7 @@ class TuitionFeeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Pago',
+                      S.of(context).paid,
                       style: TextStyle(
                         fontSize: 14,
                         color: tuitionFee.fine > 0 ? Colors.white : null,
