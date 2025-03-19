@@ -350,8 +350,7 @@ class MeetingDataSource extends CalendarDataSource {
     if (appointments![index] is Lesson) {
       return DateTime.parse((appointments![index] as Lesson).end);
       } else if (appointments![index] is Task){
-      return DateTime.parse((appointments![index] as Task).due)
-          .add(Duration(hours: 1));
+      return DateTime.parse((appointments![index] as Task).due);
     }
     return DateTime.now();
   }

@@ -30,7 +30,7 @@ class Task {
     return Task(
       id: json['id'] as int,
       title: json['activityname'],
-      due: convertTimestamp(json['timeusermidnight']),
+      due: convertTimestamp(json['timestart']),
       icon: getIcon(json['modulename']),
       type: json['modulename'],
       overdue: json['overdue'],
