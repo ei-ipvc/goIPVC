@@ -191,7 +191,7 @@ class MenuScreen extends ConsumerWidget {
             ),
             ListTile(
               leading: Icon(Icons.gavel),
-              title: Text("Termos de serviço"),
+              title: Text("Termos de uso"),
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => TermsScreen()));

@@ -29,7 +29,7 @@ class TermsScreenState extends State<TermsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Termos de serviço"),
+        title: Text("Termos de uso"),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),

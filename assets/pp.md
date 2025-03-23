@@ -11,14 +11,19 @@ A aplicação armazena os seguintes dados para o seu funcionamento:
 - **Tema da escola** na aplicação
 - **Notificações de aulas** (tempo antes da aula)
 - **Notificações de tarefas** do Moodle (tempo antes de uma tarefa)
-- **Data e hora do último acesso**
-- **Quantidade de pedidos feitos ao servidor**
+- **Data e hora do último acesso** (contas sem atividade por mais de 3 meses serão automaticamente eliminadas)
 
-O utilizador pode optar por apagar todos esses dados, incluindo a sua conta, ao selecionar a opção "Eliminar dados" nas configurações da aplicação.
+O utilizador pode optar por apagar todos os seus dados, incluindo a sua conta, ao selecionar a opção "Eliminar dados" nas definições da aplicação. Após essa ação, a conta entra em estado de "eliminar" por 24 horas. Se o utilizador não iniciar sessão nesse período, os dados são permanentemente removidos do nosso servidor. Caso volte a aceder, as informações são restauradas.
 
 ## 2. Uso de Crashlytics
 
-A aplicação utiliza [**Firebase Crashlytics**](https://firebase.google.com/docs/crashlytics/) para monitorizar e melhorar o desempenho da aplicação. O Crashlytics coleta informações sobre falhas e erros que ocorrem durante o uso da aplicação, incluindo dados sobre o dispositivo do utilizador (como modelo e sistema operativo), logs de erros e outras informações necessárias para diagnosticar e corrigir problemas técnicos. Essas informações são usadas exclusivamente para melhorar a experiência do utilizador e resolver falhas.
+A aplicação utiliza [**Firebase Crashlytics**](https://firebase.google.com/docs/crashlytics/) para monitorizar e melhorar o desempenho da aplicação. O Crashlytics coleta informações sobre falhas e erros que ocorrem durante o uso da aplicação, incluindo:
+
+- Modelo do dispositivo
+- Sistema operativo
+- Logs de erro
+
+Essas informações são utilizadas exclusivamente para melhorar a experiência do utilizador e resolver falhas. Os dados coletados pelo Crashlytics são geridos pela Google, e os utilizadores podem consultar a [Política de Privacidade do Firebase](https://firebase.google.com/support/privacy) para mais detalhes.
 
 ## 3. Utilização de Dados
 
@@ -26,7 +31,9 @@ Os dados exibidos são utilizados exclusivamente para facilitar a interação do
 
 ## 4. Segurança
 
-Embora os dados sejam armazenados temporariamente para o funcionamento da aplicação, tomamos medidas para proteger as informações transmitidas durante o processo de autenticação, utilizando protocolos seguros de comunicação.
+A segurança dos dados é uma prioridade. Todas as comunicações entre a aplicação e os servidores são encriptadas através do protocolo HTTPS. Os dados armazenados temporariamente são mantidos apenas enquanto forem necessários para o funcionamento da aplicação, sendo removidos automaticamente após 3 meses de inatividade.
+
+O utilizador é responsável por manter a segurança do seu dispositivo e das suas credenciais de acesso.
 
 ## 5. Contatos
 
@@ -36,4 +43,4 @@ Para questões relacionadas com a privacidade ou para exercer qualquer direito r
 
 Reservamo-nos o direito de modificar esta Política de Privacidade a qualquer momento. Quaisquer alterações serão publicadas na aplicação, e os utilizadores serão informados sobre as mudanças.
 
-*Última revisão: **1 de março de 2025***
+*Última revisão: **20 de março de 2025***

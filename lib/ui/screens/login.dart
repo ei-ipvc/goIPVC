@@ -340,7 +340,7 @@ class LoginState extends State<LoginScreen> {
                   text: "Ao fazer login, estás de acordo com os ",
                   children: [
                     TextSpan(
-                      text: "termos de serviço",
+                      text: "termos de uso",
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           decoration: TextDecoration.underline,
@@ -355,7 +355,7 @@ class LoginState extends State<LoginScreen> {
                           );
                         },
                     ),
-                    TextSpan(text: " e "),
+                    TextSpan(text: " e a "),
                     TextSpan(
                       text: "política de privacidade",
                       style: TextStyle(

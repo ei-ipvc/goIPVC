@@ -4,7 +4,9 @@ Ao fazer login na aplicação, é realizado um pedido a um servidor gerido por *
 
 ### 1.1 Uso de API Auto-Hospedada
 
-Se optar por hospedar a [API](https://github.com/ei-ipvc/goipvc-backend) de forma independente ou utilizar uma API de terceiros, **não garantimos a segurança desse serviço**, pois não temos controle sobre configurações, alterações ou possíveis manipulações feitas por terceiros. O utilizador assume os riscos de usar APIs de terceiros, incluindo possíveis falhas de segurança e armazenamento indevido de informações.
+Se optar por hospedar a [API](https://github.com/ei-ipvc/goipvc-backend) de forma independente ou utilizar uma API de terceiros, **não garantimos a segurança desse serviço**. Não temos controle sobre configurações, alterações ou manipulações feitas por terceiros. O utilizador assume total responsabilidade por eventuais falhas de segurança, perda de dados ou riscos de confidencialidade associados a essa prática.
+
+O utilizador pode e deve verificar qual API está a ser utilizada nas configurações da aplicação. A nossa API oficial é a `api.goipvc.xyz`. Usar qualquer outra API de terceiros implica que a segurança e integridade dos dados podem não estar garantidas.
 
 ## 2. Integração com Sistemas da Escola
 
@@ -31,27 +33,26 @@ A aplicação é licenciada sob a [Licença Pública Geral GNU v3.0](https://www
 
 ## 5. Dados Armazenados
 
-Os seguintes dados são armazenados para personalização e funcionamento da aplicação:
+Os seguintes dados são armazenados exclusivamente para personalização e funcionamento opcional da aplicação:
 
 - `username`: nome de utilizador
-- `custom_name`: nome personalizado
+- `custom_name`: nome personalizado (caso o utilizador o defina)
 - `theme`: tema da aplicação
 - `color_scheme`: esquema de cores
 - `school_theme`: tema da escola
 - `lesson_notifs`: notificações de aulas
 - `task_notifs`: notificações de trabalhos do Moodle
 - `last_seen`: último acesso
-- `requests`: quantidade de requisições feitas ao servidor
 
-Nenhuma outra informação pessoal é armazenada.
+Esses dados são armazenados apenas se o utilizador optar por personalizar a sua experiência na aplicação. Caso contrário, a aplicação funcionará sem a necessidade dessas informações.
 
 ## 6. Responsabilidade Legal e Contactos
 
 Em caso de questões legais ou reclamações, o utilizador deve enviar um e-mail para [legal@goipvc.xyz](mailto:legal@goipvc.xyz).
 
-Para dúvidas sobre estes Termos de Serviço, os utilizadores também podem entrar em contato pelo mesmo e-mail.
+Para dúvidas sobre estes Termos de Uso, os utilizadores também podem entrar em contato pelo mesmo e-mail.
 
-## 7. Alterações aos Termos de Serviço
+## 7. Alterações aos Termos de Uso
 
 Reservamo-nos o direito de modificar estes termos a qualquer momento. Alterações serão comunicadas aos utilizadores por meio de atualizações na aplicação.
 
@@ -68,11 +69,11 @@ Na máxima extensão permitida por lei, o goIPVC não será responsável por qua
 Os utilizadores concordam em indemnizar e isentar o goIPVC, desenvolvedores e mantenedores, de qualquer reclamação, dano, perda ou custo, incluindo despesas legais, resultantes de:
 
 - Uso indevido da aplicação;
-- Violação destes Termos de Serviço;
+- Violação destes Termos de Uso;
 - Violação de direitos de terceiros
 
 ## 11. Legislação Aplicável e Jurisdição
 
-Estes Termos de Serviço são regidos pelas leis de Portugal. Qualquer disputa relacionada com estes termos será resolvida nos tribunais competentes da comarca de Viana do Castelo, Portugal.
+Estes Termos de Uso são regidos pelas leis de Portugal. Qualquer disputa relacionada com estes termos será resolvida nos tribunais competentes da comarca de Viana do Castelo, Portugal.
 
-*Última revisão: **1 de março de 2025***
+*Última revisão: **20 de março de 2025***
