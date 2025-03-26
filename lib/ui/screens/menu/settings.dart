@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goipvc/main.dart';
+import 'package:goipvc/services/notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:goipvc/ui/widgets/dropdown.dart';
 import 'package:goipvc/ui/widgets/list_section.dart';
@@ -20,10 +21,10 @@ class SettingsScreen extends StatelessWidget {
           ThemeSettings(),
           Divider(),
           NotificationSettings(),
-          Divider(),
-          PreferenceSettings(),
-          Divider(),
-          ExtraSettings(),
+          // Divider(),
+          // PreferenceSettings(),
+          // Divider(),
+          // ExtraSettings(),
         ],
       ),
     );
@@ -204,7 +205,7 @@ class ThemeSettingsState extends State<ThemeSettings> {
           onChanged: _changeTheme,
         ),
       ),
-      ListTile(
+      /*ListTile(
         leading: Icon(Icons.palette),
         title: Text("Esquema de Cores"),
         trailing: Dropdown<String>(
@@ -228,44 +229,104 @@ class ThemeSettingsState extends State<ThemeSettings> {
         onTap: () {
           showSchoolBottomSheet(context);
         },
-      ),
+      ),*/
     ]);
   }
 }
 
-class NotificationSettings extends StatelessWidget {
+class NotificationSettings extends StatefulWidget {
   const NotificationSettings({super.key});
+
+  @override
+  NotificationSettingsState createState() => NotificationSettingsState();
+}
+
+class NotificationSettingsState extends State<NotificationSettings> {
+  bool lessonNotifsEnabled = false;
+  String lessonNotifsTime = "5";
+
+  Future<void> _loadNotificationSettings() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final savedNotificationState = prefs.getInt('lesson_notifs') ?? 0;
+    setState(() {
+      lessonNotifsEnabled = savedNotificationState != 0;
+      if (lessonNotifsEnabled) {
+        lessonNotifsTime = savedNotificationState.toString();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotificationSettings();
+  }
+
+  Future<void> _toggleLessonNotifs(bool value) async {
+    await Notifications.init();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (value) {
+      await prefs.setInt('lesson_notifs', int.parse(lessonNotifsTime));
+    } else {
+      await prefs.setInt('lesson_notifs', 0);
+    }
+    setState(() {
+      lessonNotifsEnabled = value;
+    });
+  }
+
+  Future<void> _saveLessonNotifTime(String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (lessonNotifsEnabled) {
+      await prefs.setInt('lesson_notifs', int.parse(value));
+      setState(() {
+        lessonNotifsTime = value;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListSection(title: "Notificações", children: [
       ListTile(
-          leading: Icon(Icons.notifications_on),
-          title: Text("Notificações"),
-          trailing: Switch(value: true, onChanged: null)),
-      ListTile(
-        leading: Icon(Icons.notification_important),
-        title: Text("Aulas"),
-        trailing: Dropdown<String>(
-          value: "5",
-          items: [
-            DropdownMenuItem<String>(
-              value: "5",
-              child: Text("5 minutos"),
-            ),
-            DropdownMenuItem<String>(
-              value: "10",
-              child: Text("10 minutos"),
-            ),
-            DropdownMenuItem<String>(
-              value: "30",
-              child: Text("30 minutos"),
-            ),
-          ],
-          onChanged: (String? value) {},
+        leading: Icon(Icons.notifications_on),
+        title: Text("Notificações"),
+        trailing: Switch(
+          value: lessonNotifsEnabled,
+          onChanged: (value) async {
+            await _toggleLessonNotifs(value);
+          },
         ),
       ),
-      ListTile(
+      if (lessonNotifsEnabled)
+        ListTile(
+          leading: Icon(Icons.notification_important),
+          title: Text("Aulas"),
+          trailing: Dropdown<String>(
+            value: lessonNotifsTime,
+            items: [
+              DropdownMenuItem<String>(
+                value: "5",
+                child: Text("5 minutos"),
+              ),
+              DropdownMenuItem<String>(
+                value: "10",
+                child: Text("10 minutos"),
+              ),
+              DropdownMenuItem<String>(
+                value: "30",
+                child: Text("30 minutos"),
+              ),
+            ],
+            onChanged: (String? value) {
+              if (value != null) {
+                _saveLessonNotifTime(value);
+              }
+            },
+          ),
+        ),
+      /*ListTile(
         leading: Icon(Icons.notification_important),
         title: Text("Tarefas"),
         trailing: Dropdown<String>(
@@ -286,7 +347,7 @@ class NotificationSettings extends StatelessWidget {
           ],
           onChanged: (String? value) {},
         ),
-      ),
+      ),*/
     ]);
   }
 }
