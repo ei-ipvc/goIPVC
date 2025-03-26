@@ -60,7 +60,7 @@ class UpdateService {
       final assets = latestRelease['assets'] as List?;
 
       final apk = assets?.firstWhere(
-        (asset) => asset['name'] == 'apk-release.apk',
+        (asset) => asset['name'] == 'app-release.apk',
         orElse: () => null,
       );
       final apkUrl = apk['browser_download_url'];
