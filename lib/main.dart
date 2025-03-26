@@ -8,21 +8,22 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:goipvc/services/notifications.dart';
+import 'package:goipvc/services/update_service.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
+
 import 'firebase_options.dart';
 import 'themes.dart';
-
 import 'generated/l10n.dart';
+import 'services/notifications.dart';
 import 'utils/shared_prefs.dart';
 import 'ui/init_view.dart';
 import 'ui/screens/login.dart';
 import 'ui/widgets/logo.dart';
 
 final Logger logger = Logger();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +41,8 @@ Future<void> main() async {
     return true;
   };
 
-  await Notifications.init();
+  // await Notifications.init();
+
   runApp(ProviderScope(child: App()));
 }
 
@@ -142,6 +144,10 @@ class AppState extends State<App> {
               }
 
               final bool isLoggedIn = snapshot.data?['isLoggedIn'] ?? false;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                UpdateService().checkForUpdate(context);
+              });
 
               return isLoggedIn ? const InitView() : const LoginScreen();
             },
