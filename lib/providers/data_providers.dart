@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:goipvc/models/curricular_unit.dart';
 import 'package:goipvc/models/lesson.dart';
 import 'package:goipvc/models/student.dart';
+import 'package:goipvc/models/teacher.dart';
 import 'package:goipvc/models/tuition_fee.dart';
 import 'package:goipvc/models/task.dart';
 import 'package:goipvc/services/data_service.dart';
@@ -103,4 +104,9 @@ final averageGradeProvider = FutureProvider<double>((ref) async {
 final tuitionsProvider = FutureProvider<List<TuitionFee>>((ref) async {
   final dataService = ref.read(dataServiceProvider);
   return dataService.getTuitionFees();
+});
+
+final teachersProvider = FutureProvider<List<Teacher>>((ref) async {
+  final dataService = ref.read(dataServiceProvider);
+  return dataService.getTeachers();
 });

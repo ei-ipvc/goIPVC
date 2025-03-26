@@ -1,30 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:goipvc/models/teacher.dart';
+import 'package:goipvc/providers/data_providers.dart';
 
-class TeachersScreen extends StatefulWidget {
+class TeachersScreen extends ConsumerStatefulWidget {
   const TeachersScreen({super.key});
 
   @override
   TeachersScreenState createState() => TeachersScreenState();
 }
 
-class TeachersScreenState extends State<TeachersScreen> {
-  // TODO: Placeholder data for teachers
-  final List<Teacher> teachers = [
-    Teacher(
-      name: 'Professor João Silva',
-      email: 'joao.silva@ipvc.pt',
-    ),
-    Teacher(
-      name: 'Professor Maria Santos',
-      email: 'maria@ipvc.pt',
-    ),
-    Teacher(
-      name: 'Professor Carlos Mendes',
-      email: 'carlos@ipvc.pt',
-    ),
-  ];
-
+class TeachersScreenState extends ConsumerState<TeachersScreen> {
   List<Teacher> _filteredTeachers = [];
 
   final TextEditingController _searchController = TextEditingController();
@@ -32,7 +18,6 @@ class TeachersScreenState extends State<TeachersScreen> {
   @override
   void initState() {
     super.initState();
-    _filteredTeachers = List.from(teachers);
     _searchController.addListener(_filterTeachers);
   }
 
@@ -44,6 +29,7 @@ class TeachersScreenState extends State<TeachersScreen> {
 
   void _filterTeachers() {
     final query = _searchController.text.toLowerCase();
+    final teachers = ref.read(teachersProvider).asData?.value ?? [];
     setState(() {
       _filteredTeachers = teachers
           .where((teacher) => teacher.name!.toLowerCase().contains(query))
@@ -53,6 +39,8 @@ class TeachersScreenState extends State<TeachersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final teachersAsyncValue = ref.watch(teachersProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Corpo Docente"),
@@ -75,19 +63,26 @@ class TeachersScreenState extends State<TeachersScreen> {
           ),
           // List of teachers
           Expanded(
-            child: ListView.builder(
-              itemCount: _filteredTeachers.length,
-              itemBuilder: (context, index) {
-                final teacher = _filteredTeachers[index];
-                return ListTile(
-                  title: Text(teacher.email ?? "Desconhecido"),
-                  subtitle: Text(teacher.email ?? "Sem email"),
-                  leading: Icon(Icons.person),
-                  onTap: () {
-                    // TODO: Missing Navigation
+            child: teachersAsyncValue.when(
+              data: (teachers) {
+                _filterTeachers();
+                return ListView.builder(
+                  itemCount: _filteredTeachers.length,
+                  itemBuilder: (context, index) {
+                    final teacher = _filteredTeachers[index];
+                    return ListTile(
+                      title: Text(teacher.name ?? "Desconhecido"),
+                      subtitle: Text(teacher.email ?? "Sem email"),
+                      leading: Icon(Icons.person),
+                      onTap: () {
+                        // TODO: Missing Navigation
+                      },
+                    );
                   },
                 );
               },
+              loading: () => Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(child: Text('Erro: $error')),
             ),
           ),
         ],
