@@ -62,10 +62,10 @@ class MenuScreen extends ConsumerWidget {
                     MaterialPageRoute(builder: (context) => TeachersScreen()));
               },
             ),
-            ListTile(
-              leading: Icon(Icons.watch_later),
-              title: Text("Horário de Serviços"),
-            )
+            // ListTile(
+            //  leading: Icon(Icons.watch_later),
+            //  title: Text("Horário de Serviços"),
+            // )
           ]),
           ListSection(title: "Académicos", children: [
             ListTile(
@@ -96,10 +96,10 @@ class MenuScreen extends ConsumerWidget {
                         builder: (context) => TuitionFeesScreen()));
               },
             ),
-            ListTile(
-              leading: Icon(Icons.calendar_today),
-              title: Text("Exames"),
-            )
+            // ListTile(
+            //  leading: Icon(Icons.calendar_today),
+            //  title: Text("Exames"),
+            // )
           ]),
           ListSection(title: "SASocial", children: [
             ListTile(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:goipvc/ui/screens/notifications.dart';
+// import 'package:goipvc/ui/screens/notifications.dart';
 
 class Header extends StatefulWidget implements PreferredSizeWidget {
   const Header({super.key});
@@ -34,12 +34,12 @@ class HeaderState extends State<Header> {
     });
   }
 
-  void _openNotificationScreen(BuildContext context) {
+  /*void _openNotificationScreen(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const NotificationsScreen()),
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +47,18 @@ class HeaderState extends State<Header> {
       elevation: 0,
       surfaceTintColor: Theme.of(context).colorScheme.surface,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      title: SvgPicture.asset(
-        imagePath,
-        height: 32,
-        colorFilter: ColorFilter.mode(
-          Theme.of(context).colorScheme.onSurface,
-          BlendMode.srcIn,
-        )
-      ),
-      actions: [
+      title: SvgPicture.asset(imagePath,
+          height: 32,
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).colorScheme.onSurface,
+            BlendMode.srcIn,
+          )),
+      /*actions: [
         IconButton(
           onPressed: () => _openNotificationScreen(context),
           icon: const Icon(Icons.notifications_none, size: 28),
         ),
-      ],
+      ],*/
     );
   }
 }

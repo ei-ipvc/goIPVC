@@ -1,13 +1,14 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:goipvc/ui/init_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
 import 'package:goipvc/generated/l10n.dart';
-import 'package:goipvc/ui/screens/first_time.dart';
+// import 'package:goipvc/ui/screens/first_time.dart';
 import 'package:goipvc/ui/screens/terms.dart';
 import 'package:goipvc/ui/screens/privacy.dart';
 import 'package:goipvc/ui/widgets/containers.dart';
@@ -107,7 +108,8 @@ class LoginState extends State<LoginScreen> {
             'moodle_sesskey', responseBody['moodle']['sesskey']);
         await prefs.setString('moodle_token', responseBody['moodle']['token']);
 
-        if (mounted) {
+        // @TODO: Implement this eventually
+        /*if (mounted) {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
@@ -128,7 +130,25 @@ class LoginState extends State<LoginScreen> {
               },
             ),
           );
-        }
+        }*/
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return InitView();
+            },
+            transitionDuration: const Duration(milliseconds: 500),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return SharedAxisTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.vertical,
+                child: child,
+              );
+            },
+          ),
+        );
       } else {
         errorMessage = 'Unknown error';
       }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:goipvc/providers/data_providers.dart';
 import 'package:goipvc/ui/widgets/home/classes.dart';
 import 'package:goipvc/ui/widgets/home/tasks.dart';
-import 'package:goipvc/ui/widgets/home/meals.dart';
+// import 'package:goipvc/ui/widgets/home/meals.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -29,7 +30,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     final balance = balanceAsync.value ?? 0.00;
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +45,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               tabs: [
                 Tab(icon: Icon(Icons.watch_later), text: 'Aulas'),
                 Tab(icon: Icon(Icons.task), text: 'Tarefas'),
-                Tab(icon: Icon(Icons.local_dining), text: 'Ementas'),
+                // Tab(icon: Icon(Icons.local_dining), text: 'Ementas'),
               ],
             ),
             Expanded(
@@ -52,7 +53,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   ClassesTab(),
                   TasksTab(),
-                  MealsTab(),
+                  // MealsTab(),
                 ],
               ),
             ),
