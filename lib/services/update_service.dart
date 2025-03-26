@@ -7,10 +7,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateService {
   static const String _githubApiUrl =
       'https://api.github.com/repos/ei-ipvc/goipvc/releases/latest';
+  String key = 'last_updt_check';
 
   Future<void> _downloadAndInstallApk(String url) async {
     try {
@@ -46,6 +48,16 @@ class UpdateService {
   }
 
   Future<void> checkForUpdate(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastUpdtCheck = prefs.getInt(key);
+    final now = DateTime.now().millisecondsSinceEpoch;
+
+    if (lastUpdtCheck != null &&
+        now - lastUpdtCheck < Duration(minutes: 15).inMilliseconds) {
+      logger.d('update check skipped, last check was less than 15 minutes ago');
+      return;
+    }
+
     try {
       final response = await http.get(Uri.parse(_githubApiUrl));
       if (response.statusCode != 200) {
@@ -89,6 +101,7 @@ class UpdateService {
       } else {
         logger.d('up-to-date');
       }
+      await prefs.setInt(key, now);
     } catch (e, stackTrace) {
       logger.e('error updting', error: e, stackTrace: stackTrace);
     }
