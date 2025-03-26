@@ -102,15 +102,17 @@ class DataService {
       final newToken = await _refreshToken(url);
 
       if (newToken['type'] == 'sas') {
-        headers['Authorization'] = newToken['authorization']!;
-        headers['x-auth-sas'] = newToken['x-auth-sas']!;
-      }
-      if (newToken['type'] == 'moodle') {
-        body = 'sesskey=${newToken['sesskey']}';
-        headers['x-auth-moodle'] = newToken['x-auth-moodle']!;
+        headers.addAll({
+          'Authorization': newToken['authorization']!,
+          'x-auth-sas': newToken['x-auth-sas']!,
+        });
       } else {
-        headers['x-auth-${newToken['type']}'] =
-            newToken['x-auth-${newToken['type']}']!;
+        headers['x-auth-${newToken['type']}'] = newToken['token']!;
+
+        // @TODO: to be deprecated
+        if (newToken['type'] == 'moodle') {
+          body = 'sesskey=${newToken['sesskey']}';
+        }
       }
 
       return await request(method, url, headers, body: body, retry: false);
