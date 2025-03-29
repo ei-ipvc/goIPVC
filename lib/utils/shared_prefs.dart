@@ -29,5 +29,9 @@ class SharedPrefsUtil {
     if (!prefs.containsKey('school_theme')) {
       await prefs.setString('school_theme', 'IPVC');
     }
+
+    if (!prefs.containsKey('server_url')) {
+      await prefs.setString('server_url', 'https://api.goipvc.xyz');
+    }
   }
 }
