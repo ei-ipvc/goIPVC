@@ -252,7 +252,7 @@ class GradeAverage extends StatelessWidget {
                 ))
           ] else
             Text(
-              '$grade',
+              grade != null ? grade!.toStringAsFixed(2) : '?',
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: 40,
