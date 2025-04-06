@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:goipvc/ui/widgets/skeleton.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -290,8 +291,22 @@ class UserCard extends ConsumerWidget {
                 ],
               );
             },
-            loading: () => Center(
-              child: CircularProgressIndicator(),
+            loading: () => Padding(
+              padding: EdgeInsets.only(top: 4),
+              child: Row(
+                children: [
+                  CircleSkeleton(size: 48),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Skeleton(height: 52)
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             error: (_, __) => Wrap(
               spacing: 4,
