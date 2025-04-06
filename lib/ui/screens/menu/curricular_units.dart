@@ -8,6 +8,7 @@ import 'package:goipvc/ui/widgets/list_section.dart';
 import 'package:goipvc/ui/widgets/card.dart';
 import 'package:goipvc/ui/widgets/dot.dart';
 import 'package:goipvc/ui/widgets/curricular_unit/grade.dart';
+import 'package:goipvc/ui/widgets/skeleton.dart';
 
 final selectedChipProvider = StateProvider.autoDispose<int>((ref) => -1);
 
@@ -238,8 +239,8 @@ class GradeAverage extends StatelessWidget {
         children: [
           if (loading && !error)
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: CircularProgressIndicator(),
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Skeleton(height: 40, width: 120)
             )
           else if (error) ...[
             Padding(
