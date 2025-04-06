@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goipvc/main.dart';
 import 'package:goipvc/services/notifications.dart';
+import 'package:goipvc/ui/widgets/settings/server.dart';
 import 'package:http/http.dart' as http;
 import 'package:goipvc/ui/widgets/dropdown.dart';
 import 'package:goipvc/ui/widgets/list_section.dart';
@@ -21,6 +22,10 @@ class SettingsScreen extends StatelessWidget {
           ThemeSettings(),
           Divider(),
           NotificationSettings(),
+          Divider(),
+          ListSection(title: "Avançado", children: [
+            ServerSettings()
+          ])
           // Divider(),
           // PreferenceSettings(),
           // Divider(),
