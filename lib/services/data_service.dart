@@ -7,11 +7,15 @@ import 'package:goipvc/models/teacher.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/name_value_pair.dart';
+import '../models/search_schedule.dart';
 import '../models/task.dart';
 import '../providers/data_providers.dart';
 import '../models/lesson.dart';
 import '../models/student.dart';
 import '../models/tuition_fee.dart';
+
+part 'data/schedule.dart';
 
 class DataService {
   final Ref ref;
