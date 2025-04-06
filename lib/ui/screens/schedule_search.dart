@@ -3,6 +3,8 @@ import 'package:goipvc/models/lesson.dart';
 import 'package:goipvc/services/data_service.dart';
 import 'package:goipvc/ui/screens/schedule.dart';
 
+import '../widgets/error_message.dart';
+
 class ScheduleSearchView extends StatefulWidget {
   final String year;
   final String semester;
@@ -24,7 +26,7 @@ class _ScheduleSearchViewState extends State<ScheduleSearchView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Schedule for ${widget.classId}"),
+        title: Text("Horário de ${widget.classId}"),
       ),
       body: FutureBuilder(
           future: ScheduleService.search(widget.year, widget.semester, widget.classId),
@@ -32,9 +34,12 @@ class _ScheduleSearchViewState extends State<ScheduleSearchView> {
             if(snapshot.hasData) {
               return ScheduleScreen(customSchedule: snapshot.data);
             } else if (snapshot.hasError) {
-              return Text("Failed to find schedule");
+              return ErrorMessage(
+                  error: snapshot.error.toString(),
+                  callback: null
+              );
             } else {
-              return Text("loading...");
+              return Center(child: CircularProgressIndicator());
             }
           }
       )

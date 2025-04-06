@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goipvc/models/search_schedule.dart';
 import 'package:goipvc/services/data_service.dart';
+import 'package:goipvc/ui/widgets/skeleton.dart';
 
 import '../../models/name_value_pair.dart';
 import '../screens/schedule_search.dart';
@@ -68,7 +69,7 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("title"),
+      title: Text("Pesquisar Horário"),
       content: FutureBuilder(
           future: ScheduleService.getInitialOptions(),
           builder: (BuildContext context,
@@ -81,7 +82,7 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
                   DropdownButtonFormField<String>(
                     value: selectedYear,
-                    decoration: InputDecoration(labelText: "year"),
+                    decoration: InputDecoration(labelText: "Ano"),
                     isExpanded: true,
                     items: options.years.map((year) {
                       return DropdownMenuItem<String>(
@@ -99,7 +100,7 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
                   SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: selectedSemester,
-                    decoration: InputDecoration(labelText: "semester"),
+                    decoration: InputDecoration(labelText: "Semestre"),
                     isExpanded: true,
                     items: options.semesters.map((semester) {
                       return DropdownMenuItem<String>(
@@ -117,7 +118,7 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
                   SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: selectedSchool,
-                    decoration: InputDecoration(labelText: "school"),
+                    decoration: InputDecoration(labelText: "Escola"),
                     isExpanded: true,
                     items: options.schools.map((school) {
                       return DropdownMenuItem<String>(
@@ -135,7 +136,7 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
                   SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: selectedDegree,
-                    decoration: InputDecoration(labelText: "degree"),
+                    decoration: InputDecoration(labelText: "Grau"),
                     isExpanded: true,
                     items: options.degrees.map((degree) {
                       return DropdownMenuItem<String>(
@@ -152,73 +153,73 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
                   ),
 
                   if(showCourseInput)
-                    FutureBuilder(
-                        future: ScheduleService.getCourses(selectedYear!, selectedDegree!, selectedSchool!),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<NameValuePair>> courses) {
-                          if(courses.hasData) {
-                            return Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: DropdownButtonFormField<String>(
-                                key: _courseRefreshKey,
-                                value: selectedCourse,
-                                decoration: InputDecoration(labelText: "course"),
-                                isExpanded: true,
-                                items: courses.data!.map((course) {
-                                  return DropdownMenuItem<String>(
-                                    value: course.value,
-                                    child: Text(course.name, overflow: TextOverflow.ellipsis),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedCourse = value;
-                                    shouldShowClassInput();
-                                  });
-                                }
-                              ),
-                            );
-                          } else if(courses.hasError) {
-                            return Text("error: ${courses.error}");
-                          } else {
-                            return Text("loading...");
+                    Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: FutureBuilder(
+                          future: ScheduleService.getCourses(selectedYear!, selectedDegree!, selectedSchool!),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<NameValuePair>> courses) {
+                            if(courses.hasData) {
+                              return DropdownButtonFormField<String>(
+                                  key: _courseRefreshKey,
+                                  value: selectedCourse,
+                                  decoration: InputDecoration(labelText: "Curso"),
+                                  isExpanded: true,
+                                  items: courses.data!.map((course) {
+                                    return DropdownMenuItem<String>(
+                                      value: course.value,
+                                      child: Text(course.name, overflow: TextOverflow.ellipsis),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedCourse = value;
+                                      shouldShowClassInput();
+                                    });
+                                  }
+                              );
+                            } else if(courses.hasError) {
+                              return Text("Erro a obter cursos");
+                            } else {
+                              return Skeleton(height: 56, width: 283);
+                            }
                           }
-                        }
+                      )
                     ),
 
                   if(showClassInput)
-                    FutureBuilder(
-                        future: ScheduleService.getClasses(selectedYear!, selectedSemester!, selectedCourse!),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<NameValuePair>> classes) {
-                          if(classes.hasData) {
-                            return Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: DropdownButtonFormField<String>(
-                                key: _classRefreshKey,
-                                value: selectedClass,
-                                decoration: InputDecoration(labelText: "class name"),
-                                isExpanded: true,
-                                items: classes.data!.map((classData) {
-                                  return DropdownMenuItem<String>(
-                                    value: classData.value,
-                                    child: Text(classData.name, overflow: TextOverflow.ellipsis),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedClass = value;
-                                    shouldAllowSearch();
-                                  });
-                                }
-                              ),
-                            );
-                          } else if(classes.hasError) {
-                            return Text("error: ${classes.error}");
-                          } else {
-                            return Text("loading...");
+                    Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: FutureBuilder(
+                          future: ScheduleService.getClasses(selectedYear!, selectedSemester!, selectedCourse!),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<NameValuePair>> classes) {
+                            if(classes.hasData) {
+                              return DropdownButtonFormField<String>(
+                                  key: _classRefreshKey,
+                                  value: selectedClass,
+                                  decoration: InputDecoration(labelText: "Turma"),
+                                  isExpanded: true,
+                                  items: classes.data!.map((classData) {
+                                    return DropdownMenuItem<String>(
+                                      value: classData.value,
+                                      child: Text(classData.name, overflow: TextOverflow.ellipsis),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedClass = value;
+                                      shouldAllowSearch();
+                                    });
+                                  }
+                              );
+                            } else if(classes.hasError) {
+                              return Text("Erro a obter turmas");
+                            } else {
+                              return Skeleton(height: 56);
+                            }
                           }
-                        }
+                      ),
                     )
                 ]),
               );
@@ -227,7 +228,18 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
                   height: 100,
                   child: Text(snapshot.error.toString()));
             } else {
-              return SizedBox(height: 100, child: Text("loading..."));
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Skeleton(height: 56, width: 239),
+                  SizedBox(height: 20),
+                  Skeleton(height: 56, width: 239),
+                  SizedBox(height: 20),
+                  Skeleton(height: 56, width: 239),
+                  SizedBox(height: 20),
+                  Skeleton(height: 56, width: 239)
+                ],
+              );
             }
           }),
       actions: [
@@ -235,7 +247,7 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("close"),
+          child: Text("Fechar"),
         ),
         TextButton(
           onPressed: allowSearch
@@ -250,7 +262,7 @@ class _ManualScheduleFormState extends State<ManualScheduleForm> {
                   ))
               );
             } : null,
-          child: Text("search"),
+          child: Text("Pesquisar"),
         ),
       ],
     );
