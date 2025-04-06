@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goipvc/main.dart';
 import 'package:goipvc/services/notifications.dart';
-import 'package:http/http.dart' as http;
+import 'package:goipvc/ui/widgets/settings/server_tile.dart';
 import 'package:goipvc/ui/widgets/dropdown.dart';
 import 'package:goipvc/ui/widgets/list_section.dart';
-import 'package:goipvc/ui/widgets/containers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -23,8 +22,8 @@ class SettingsScreen extends StatelessWidget {
           NotificationSettings(),
           // Divider(),
           // PreferenceSettings(),
-          // Divider(),
-          // ExtraSettings(),
+          Divider(),
+          ExtraSettings(),
         ],
       ),
     );
@@ -388,102 +387,22 @@ class ExtraSettings extends StatefulWidget {
 }
 
 class ExtraSettingsState extends State<ExtraSettings> {
-  final TextEditingController _serverController =
-      TextEditingController(text: 'https://api.goipvc.xyz');
-  final FocusNode _serverFocusNode = FocusNode();
-  Color _serverBorderColor = Colors.grey;
-
-  Future<void> _pingServer() async {
-    final String serverUrl = _serverController.text;
-
-    try {
-      final response =
-          await http.get(Uri.parse(serverUrl)).timeout(Duration(seconds: 5));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _serverBorderColor = Colors.green;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _serverBorderColor = Colors.red;
-      });
-    }
-  }
-
-  void _showServerSettings(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _serverController,
-                focusNode: _serverFocusNode,
-                decoration: InputDecoration(
-                  labelText: "Server:",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _serverBorderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _serverBorderColor),
-                  ),
-                ),
-                autocorrect: false,
-              ),
-            ],
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: _pingServer,
-                  child: Text("Test"),
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Save")),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return ListSection(title: "Extra", children: [
-      ListTile(
-        leading: Icon(Icons.dns),
-        title: Text("Server"),
-        trailing: ValueListenableBuilder<TextEditingValue>(
-          valueListenable: _serverController,
-          builder: (context, value, child) {
-            return TextContainer(text: value.text);
-          },
-        ),
-        onTap: () {
-          _showServerSettings(context);
-        },
-      ),
-      ListTile(
-        leading: Icon(
-          Icons.delete_forever,
-          color: Colors.red,
-        ),
-        title: Text(
-          "Eliminar Dados",
-          style: TextStyle(color: Colors.red),
-        ),
-        onTap: () {},
-      ),
+      ServerTile()
+      // ListTile(
+      //   leading: Icon(
+      //     Icons.delete_forever,
+      //     color: Colors.red,
+      //   ),
+      //   title: Text(
+      //     "Eliminar Dados",
+      //     style: TextStyle(color: Colors.red),
+      //   ),
+      //   onTap: () {},
+      // ),
     ]);
   }
 }
