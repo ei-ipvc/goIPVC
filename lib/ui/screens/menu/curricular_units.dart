@@ -154,8 +154,18 @@ class CurricularUnitsScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => Column(
-                  children: [SizedBox(height: 60), CircularProgressIndicator()],
+                loading: () => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Row(children: [Skeleton(height: 30, width: 80)]),
+                      for(var i = 0; i < 6; i++)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Skeleton(height: 60),
+                        )
+                    ],
+                  ),
                 ),
                 error: (error, stackTrace) => Column(
                   children: [
