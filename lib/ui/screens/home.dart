@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:goipvc/providers/data_providers.dart';
 import 'package:goipvc/ui/widgets/home/classes.dart';
 import 'package:goipvc/ui/widgets/home/tasks.dart';
+
+import '../widgets/skeleton.dart';
 // import 'package:goipvc/ui/widgets/home/meals.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -36,9 +38,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Greeting(
-              title: 'Olá $firstName!',
+              title: firstNameAsync.isLoading ? null : 'Olá $firstName!',
               slogan: 'O teu ● de partida',
-              money: '$balance €',
+              money: balanceAsync.isLoading ? null : '$balance €',
               subtitle: 'Saldo atual',
             ),
             TabBar(
@@ -65,9 +67,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class Greeting extends StatelessWidget {
-  final String title;
+  final String? title;
   final String slogan;
-  final String money;
+  final String? money;
   final String subtitle;
 
   const Greeting({
@@ -91,14 +93,19 @@ class Greeting extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  title != null
+                      ? Text(
+                          title!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : const Skeleton(
+                          height: 32,
+                          width: 150,
+                        ),
                   Text(
                     slogan,
                   ),
@@ -107,13 +114,19 @@ class Greeting extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    money,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  money != null
+                      ? Text(
+                          money!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : const Skeleton(
+                          height: 32,
+                          width: 100,
+                        ),
                   Text(
                     subtitle,
                   ),
