@@ -8,6 +8,7 @@ import 'package:goipvc/ui/widgets/error_message.dart';
 import 'package:goipvc/ui/widgets/card.dart';
 import 'package:goipvc/ui/widgets/lesson_sheet.dart';
 import 'package:goipvc/ui/widgets/dot.dart';
+import '../skeleton.dart';
 import 'date_section.dart';
 
 class ClassesTab extends ConsumerWidget {
@@ -129,12 +130,29 @@ class ClassesTab extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: CircularProgressIndicator(),
-        ),
+      loading: () => ListView.builder(
+        itemCount: 7,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Skeleton(height: 25, width: 100),
+                    Skeleton(height: 25, width: 100),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Skeleton(height: 20),
+                SizedBox(height: 5),
+                Skeleton(height: 20),
+                SizedBox(height: 30)
+              ],
+            ),
+          );
+        },
       ),
       error: (error, stackTrace) => ErrorMessage(
           error: error.toString(),

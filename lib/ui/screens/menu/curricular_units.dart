@@ -8,6 +8,7 @@ import 'package:goipvc/ui/widgets/list_section.dart';
 import 'package:goipvc/ui/widgets/card.dart';
 import 'package:goipvc/ui/widgets/dot.dart';
 import 'package:goipvc/ui/widgets/curricular_unit/grade.dart';
+import 'package:goipvc/ui/widgets/skeleton.dart';
 
 final selectedChipProvider = StateProvider.autoDispose<int>((ref) => -1);
 
@@ -153,8 +154,18 @@ class CurricularUnitsScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => Column(
-                  children: [SizedBox(height: 60), CircularProgressIndicator()],
+                loading: () => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Row(children: [Skeleton(height: 30, width: 80)]),
+                      for(var i = 0; i < 6; i++)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Skeleton(height: 60),
+                        )
+                    ],
+                  ),
                 ),
                 error: (error, stackTrace) => Column(
                   children: [
@@ -238,8 +249,8 @@ class GradeAverage extends StatelessWidget {
         children: [
           if (loading && !error)
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: CircularProgressIndicator(),
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Skeleton(height: 40, width: 120)
             )
           else if (error) ...[
             Padding(
