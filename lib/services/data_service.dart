@@ -220,15 +220,11 @@ class DataService {
     final onToken = prefs['on_token'] ?? '';
 
     try {
-      final response = await request(
-        'POST',
-        '$serverUrl/on/schedule',
-        {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'x-auth-on': onToken,
-        },
-        body: 'studentId=$studentId',
-      ).timeout(Duration(seconds: 5));
+      final response =
+          await request('GET', '$serverUrl/on/schedule?studentId=$studentId', {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'x-auth-on': onToken,
+      }).timeout(Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
@@ -264,14 +260,10 @@ class DataService {
     final moodleSesskey = prefs['moodle_sesskey'] ?? '';
 
     final response = await request(
-      'POST',
-      '$serverUrl/moodle/assignments',
-      {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'x-auth-moodle': moodleToken,
-      },
-      body: 'sesskey=$moodleSesskey',
-    );
+        'GET', '$serverUrl/moodle/assignments?sesskey=$moodleSesskey', {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'x-auth-moodle': moodleToken,
+    });
 
     final data = jsonDecode(response.body) as List;
     return data.map((e) => Task.fromJson(e)).toList();
@@ -303,18 +295,16 @@ class DataService {
 
   Future<Uint8List> getStudentImage(int studentId) async {
     final prefs = await ref.read(prefsProvider.future);
+    final serverUrl = prefs['server_url'] ?? '';
     final academicosToken = prefs['academicos_token'] ?? 'JSESSIONID=...';
 
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     var courseId = sharedPreferences.getInt('course_id');
 
-    // @Matt: this won't work for now since we're not passing a cookie, needs a backend fix.
-    final url =
-        'https://academicos.ipvc.pt/netpa/PhotoLoader?codAluno=$studentId&codCurso=$courseId';
     final response = await request(
       'GET',
-      "example.com", //url,
+      '$serverUrl/academicos/student-image?studentId=$studentId&courseId=$courseId',
       {'x-auth-academicos': academicosToken},
     );
 
@@ -338,13 +328,12 @@ class DataService {
     );
 
     final response = await request(
-        'POST',
-        '$serverUrl/on/curricular-unit',
+        'GET',
+        '$serverUrl/on/curricular-unit?courseId=$courseId&classId=$curricularUnitId',
         {
           'Content-Type': 'application/x-www-form-urlencoded',
           'x-auth-on': onToken
-        },
-        body: 'courseId=$courseId&classId=$curricularUnitId');
+        });
 
     final puc = PUC.fromJson(jsonDecode(response.body));
     curricularUnit.puc = puc;
