@@ -12,8 +12,12 @@ import 'package:goipvc/ui/widgets/error_message.dart';
 import 'package:goipvc/providers/data_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../widgets/search_schedule_form.dart';
+
 class ScheduleScreen extends ConsumerStatefulWidget {
-  const ScheduleScreen({super.key});
+  final List<Lesson>? customSchedule;
+
+  const ScheduleScreen({super.key, this.customSchedule});
 
   @override
   ConsumerState<ScheduleScreen> createState() => _ScheduleScreenState();
@@ -100,6 +104,10 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
   }
 
   MeetingDataSource _getDataSource(List<Lesson> lessons, List<Task> tasks) {
+    if(widget.customSchedule != null) {
+      return MeetingDataSource(context, widget.customSchedule!, [], _holidays);
+    }
+
     return MeetingDataSource(context, lessons, tasks, _holidays);
   }
 
@@ -159,6 +167,14 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     );
   }
 
+  void _showSearchScheduleForm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const ManualScheduleForm();
+        });
+  }
+
   void _updateView(CalendarView newView, BuildContext context) {
     setState(() {
       _currentView = newView;
@@ -206,12 +222,20 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.today),
-                    onPressed: () {
-                      _calendarController.displayDate = DateTime.now();
-                    },
-                  ),
+                  if(widget.customSchedule == null)
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        _showSearchScheduleForm(context);
+                      },
+                    ),
+                  if(widget.customSchedule == null)
+                    IconButton(
+                      icon: Icon(Icons.today),
+                      onPressed: () {
+                        _calendarController.displayDate = DateTime.now();
+                      },
+                    ),
                   IconButton(
                     icon: Icon(Icons.settings),
                     onPressed: () {
