@@ -198,6 +198,19 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     _savePreferences();
   }
 
+  void _selectDate() async {
+    final DateTime now = DateTime.now();
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: _calendarController.displayDate,
+      firstDate: DateTime(2014),
+      lastDate: DateTime(now.year + 1, 12, 31),
+    );
+    if (selectedDate != null) {
+      _calendarController.displayDate = selectedDate;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final combinedAsync = ref.watch(combinedProvider);
@@ -213,31 +226,51 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                 children: [
                   Expanded(
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          toBeginningOfSentenceCase(_headerText),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18),
+                        InkWell(
+                          onTap: _selectDate,
+                          borderRadius: BorderRadius.circular(20),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 4
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  toBeginningOfSentenceCase(_headerText),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Icon(
+                                    Icons.arrow_drop_down_rounded,
+                                    size: 28
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
+                      ]
+                    )
                   ),
                   if(widget.customSchedule == null)
                     IconButton(
-                      icon: Icon(Icons.search),
+                      icon: Icon(Icons.search_rounded),
                       onPressed: () {
                         _showSearchScheduleForm(context);
                       },
                     ),
                   if(widget.customSchedule == null)
                     IconButton(
-                      icon: Icon(Icons.today),
+                      icon: Icon(Icons.today_rounded),
                       onPressed: () {
                         _calendarController.displayDate = DateTime.now();
                       },
                     ),
                   IconButton(
-                    icon: Icon(Icons.settings),
+                    icon: Icon(Icons.settings_rounded),
                     onPressed: () {
                       _showSettingsSheet(context);
                     },
