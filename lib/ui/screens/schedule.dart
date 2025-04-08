@@ -48,7 +48,15 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
   @override
   void initState() {
     super.initState();
+
     _headerText = DateFormat('MMMM yyyy').format(DateTime.now());
+
+    if(widget.customSchedule != null) {
+      final startDate = DateTime.parse(widget.customSchedule!.first.start);
+      _calendarController.displayDate = startDate;
+      _headerText = DateFormat('MMMM yyyy').format(startDate);
+    }
+
     _loadPreferences();
   }
 
@@ -203,8 +211,12 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     final DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: _calendarController.displayDate,
-      firstDate: DateTime(2014),
-      lastDate: DateTime(now.year + 1, 12, 31),
+      firstDate: widget.customSchedule != null
+          ? DateTime.parse(widget.customSchedule!.first.start)
+          : DateTime(2014),
+      lastDate: widget.customSchedule != null
+          ? DateTime.parse(widget.customSchedule!.last.end)
+          : DateTime(now.year + 1, 12, 31),
     );
     if (selectedDate != null) {
       _calendarController.displayDate = selectedDate;
