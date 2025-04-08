@@ -20,7 +20,6 @@ import 'services/notifications.dart';
 import 'utils/shared_prefs.dart';
 import 'ui/init_view.dart';
 import 'ui/screens/login.dart';
-import 'ui/widgets/logo.dart';
 
 final Logger logger = Logger();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -132,15 +131,12 @@ class AppState extends State<App> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Scaffold(
                     body: Center(
-                        child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Logo(),
-                    SizedBox(height: 10),
-                    CircularProgressIndicator()
-                  ],
-                )));
+                        child: SizedBox(
+                          width: 200,
+                          child: LinearProgressIndicator()
+                        )
+                    )
+                );
               }
 
               final bool isLoggedIn = snapshot.data?['isLoggedIn'] ?? false;
