@@ -211,7 +211,7 @@ class LoginState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Logo(),
+              Logo(size: 256),
               const SizedBox(
                 height: 20,
               ),
