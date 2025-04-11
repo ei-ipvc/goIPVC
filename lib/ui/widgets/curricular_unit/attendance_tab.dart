@@ -5,6 +5,7 @@ import 'package:goipvc/providers/data_providers.dart';
 
 import 'package:goipvc/ui/widgets/card.dart';
 import 'package:goipvc/ui/widgets/curricular_unit/summary.dart';
+import 'package:goipvc/ui/widgets/error_message.dart';
 
 class AttendanceTab extends ConsumerWidget {
   final CurricularUnit curricularUnit;
@@ -24,12 +25,6 @@ class AttendanceTab extends ConsumerWidget {
       },
       child: summariesAsync.when(
         data: (summaries) {
-          if (summaries.isEmpty) {
-            return Center(
-              child: Text('No summaries available'),
-            );
-          }
-
           final reversedSummaries = summaries.reversed.toList();
 
           return SingleChildScrollView(
@@ -67,25 +62,35 @@ class AttendanceTab extends ConsumerWidget {
                   ),
                 ),
 
-                ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: reversedSummaries.length,
-                  itemBuilder: (context, index) {
-                    return SummaryCard(
-                      summary: reversedSummaries[index],
-                      presenceStatus: null,
-                    );
-                  },
-                ),
+                if(summaries.isNotEmpty) ...[
+                  ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: reversedSummaries.length,
+                    itemBuilder: (context, index) {
+                      return SummaryCard(
+                        summary: reversedSummaries[index],
+                        presenceStatus: null,
+                      );
+                    },
+                  ),
+                ] else ...[
+                  Center(
+                    child: Text('Sem sumários disponíveis'),
+                  )
+                ]
               ],
             ),
           );
         },
         loading: () => Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(
-          child: Text('Error loading summaries: ${error.toString()}'),
+        error: (error, stackTrace) => ErrorMessage(
+          error: error.toString(),
+          stackTrace: stackTrace.toString(),
+            callback: () {
+              ref.invalidate(lessonSummariesProvider);
+            }
         ),
       ),
     );

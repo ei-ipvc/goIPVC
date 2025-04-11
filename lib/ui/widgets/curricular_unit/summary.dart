@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goipvc/models/summary.dart';
+import 'package:goipvc/ui/screens/menu/summary.dart';
+
 import 'package:goipvc/ui/widgets/card.dart';
 import 'package:goipvc/ui/widgets/dot.dart';
 
@@ -49,6 +51,17 @@ class SummaryCard extends StatelessWidget {
     }
 
     return FilledCard(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    SummaryScreen(
+                      summary: summary,
+                    )
+            )
+        );
+      },
       titleWidget: Row(
         children: [
           Text(
