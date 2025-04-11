@@ -115,22 +115,24 @@ class UnitHeader extends StatelessWidget {
                   ],
                 ),
 
-                // TODO: Add to api the various hours curricular unit can have
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Wrap(
                     spacing: 4,
-                    children: [
-                      Chip(
+                    children: curricularUnit.puc?.classType.map<Widget>((classType) {
+                      final type = classType['type'];
+                      final hours = classType['hours'];
+
+                      return Chip(
                         label: Text(
-                          "PL: ${'--'} horas",
+                          "$type: $hours horas",
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 2),
-                      ),
+                      );
+                    }).toList() ?? [
+                      // Fallback if PUC or classType is null
                       Chip(
-                        label: Text(
-                          "TP: ${'--'} horas",
-                        ),
+                        label: Text("Sem informação de horas"),
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                       ),
                     ],
