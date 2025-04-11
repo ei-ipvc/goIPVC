@@ -7,7 +7,7 @@ import 'package:goipvc/models/student.dart';
 import 'package:goipvc/models/teacher.dart';
 import 'package:goipvc/models/tuition_fee.dart';
 import 'package:goipvc/models/task.dart';
-import 'package:goipvc/models/summaries.dart';
+import 'package:goipvc/models/summary.dart';
 import 'package:goipvc/services/data_service.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';

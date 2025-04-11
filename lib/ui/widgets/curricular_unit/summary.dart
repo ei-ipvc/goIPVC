@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:goipvc/models/summaries.dart';
+import 'package:goipvc/models/summary.dart';
 import 'package:goipvc/ui/widgets/card.dart';
 import 'package:goipvc/ui/widgets/dot.dart';
 

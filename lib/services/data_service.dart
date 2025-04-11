@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/name_value_pair.dart';
 import '../models/search_schedule.dart';
-import '../models/summaries.dart';
+import '../models/summary.dart';
 import '../models/task.dart';
 import '../providers/data_providers.dart';
 import '../models/lesson.dart';
