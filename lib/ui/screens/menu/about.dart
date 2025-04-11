@@ -40,7 +40,7 @@ class AboutScreen extends StatelessWidget {
           Column(
             children: [
               Logo(
-                size: 48,
+                size: 256,
               ),
               Text("Version: v1.0")
             ],
