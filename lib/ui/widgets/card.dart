@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class FilledCard extends StatelessWidget {
+  final Widget? iconWidget;
   final IconData? icon;
   final String? title;
+  final Widget? titleWidget;
+  final Widget? footer;
+  final Widget? trailing;
   final Color? backgroundColor;
   final double? paddingVertical;
   final double? paddingHorizontal;
@@ -16,7 +20,11 @@ class FilledCard extends StatelessWidget {
     super.key,
     required this.children,
     this.icon,
+    this.iconWidget,
     this.title,
+    this.titleWidget,
+    this.footer,
+    this.trailing,
     this.backgroundColor,
     this.paddingVertical,
     this.paddingHorizontal,
@@ -28,48 +36,86 @@ class FilledCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasHeader = titleWidget != null || (title != null && title!.isNotEmpty);
+    final currentIcon = iconWidget ?? (icon != null
+        ? Icon(
+      icon,
+      size: 16,
+      color: Theme.of(context).colorScheme.primary,
+    )
+        : null);
 
     return Card.filled(
       color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainer,
-      margin: EdgeInsets.symmetric(vertical: marginVertical ?? 6, horizontal: marginHorizontal ?? 0),
+      margin: EdgeInsets.symmetric(
+        vertical: marginVertical ?? 6,
+        horizontal: marginHorizontal ?? 0,
+      ),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: paddingVertical ?? 10, horizontal: paddingHorizontal ?? 10),
-          child: Wrap(
-            spacing: 4,
-            children: [
-              if(title != null && title!.isNotEmpty)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (hasHeader)
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  top: 10,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 6),
-                      child: Icon(
-                        icon,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.primary,
+                    if (currentIcon != null)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: currentIcon,
                       ),
-                    ),
-                    Text(
+                    Expanded(
+                      child: titleWidget ?? Text(
                         title!,
                         style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold
-                        )
-                    )
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    if (trailing != null) trailing!,
                   ],
                 ),
+              ),
 
-              ...children,
-            ]
-          )
+            // Content section
+            Padding(
+              padding: EdgeInsets.only(
+                left: paddingHorizontal ?? 10,
+                right: paddingHorizontal ?? 10,
+                top: hasHeader ? 0 : 10,
+                bottom: footer != null ? 0 : 10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: children,
+              ),
+            ),
+
+            // Footer section
+            if (footer != null)
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  bottom: 10,
+                ),
+                child: footer!
+              ),
+          ],
         ),
-      )
-
+      ),
     );
   }
 }
