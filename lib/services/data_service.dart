@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/name_value_pair.dart';
 import '../models/search_schedule.dart';
+import '../models/summaries.dart';
 import '../models/task.dart';
 import '../providers/data_providers.dart';
 import '../models/lesson.dart';
@@ -385,5 +386,20 @@ class DataService {
     final teachers = data.map((e) => Teacher.fromJson(e)).toList();
 
     return teachers;
+  }
+
+  Future<List<Summary>> getLessonSummaries(int curricularUnitId) async {
+    final prefs = await ref.read(prefsProvider.future);
+    final serverUrl = prefs['server_url'] ?? '';
+    final moodleToken = prefs['moodle_token'] ?? '';
+
+    final response = await request(
+      'GET',
+      '$serverUrl/moodle/lesson-summaries?curricularUnitId=$curricularUnitId',
+      {'x-auth-moodle': moodleToken},
+    );
+
+    final data = jsonDecode(response.body) as List;
+    return data.map((e) => Summary.fromJson(e)).toList();
   }
 }

@@ -4,6 +4,7 @@ import 'package:goipvc/models/curricular_unit.dart';
 import 'package:goipvc/providers/data_providers.dart';
 
 import 'package:goipvc/ui/widgets/card.dart';
+import 'package:goipvc/ui/widgets/curricular_unit/summary.dart';
 
 class AttendanceTab extends ConsumerWidget {
   final CurricularUnit curricularUnit;
@@ -15,39 +16,78 @@ class AttendanceTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final summariesAsync = ref.watch(lessonSummariesProvider(curricularUnit.id));
+
     return RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(curricularUnitProvider);
-        },
-        child: ListView(
-          padding: const EdgeInsets.all(12),
-          children: [
-            Row(
+      onRefresh: () async {
+        ref.invalidate(lessonSummariesProvider(curricularUnit.id));
+      },
+      child: summariesAsync.when(
+        data: (summaries) {
+          if (summaries.isEmpty) {
+            return Center(
+              child: Text('No summaries available'),
+            );
+          }
+
+          final reversedSummaries = summaries.reversed.toList();
+
+          return SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Column(
               children: [
-                AttendanceCard(
-                  type: "TP",
-                  quantity: 7,
-                  total: 10,
-                  attendanceClass: "A",
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6
+                  ),
+                  child: Row(
+                    children: [
+                      AttendanceCard(
+                        type: "TP",
+                        quantity: 7,
+                        total: 10,
+                        attendanceClass: "A",
+                      ),
+                      SizedBox(width: 10),
+                      AttendanceCard(
+                        type: "PL",
+                        quantity: 7,
+                        total: 10,
+                        attendanceClass: "A",
+                      ),
+                      SizedBox(width: 10),
+                      AttendanceCard(
+                        type: "T",
+                        quantity: 7,
+                        total: 10,
+                        attendanceClass: "A",
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(width: 10),
-                AttendanceCard(
-                  type: "PL",
-                  quantity: 7,
-                  total: 10,
-                  attendanceClass: "A",
-                ),
-                SizedBox(width: 10),
-                AttendanceCard(
-                  type: "T",
-                  quantity: 7,
-                  total: 10,
-                  attendanceClass: "A",
+
+                ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: reversedSummaries.length,
+                  itemBuilder: (context, index) {
+                    return SummaryCard(
+                      summary: reversedSummaries[index],
+                      presenceStatus: null,
+                    );
+                  },
                 ),
               ],
-            )
-          ],
-        )
+            ),
+          );
+        },
+        loading: () => Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(
+          child: Text('Error loading summaries: ${error.toString()}'),
+        ),
+      ),
     );
   }
 }
