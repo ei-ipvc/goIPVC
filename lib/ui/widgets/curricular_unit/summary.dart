@@ -16,19 +16,29 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color statusColor;
+    Color textColor;
     String statusText;
 
     switch (presenceStatus) {
       case true:
         statusColor = Colors.green;
+        textColor = Colors.white;
         statusText = 'Presente';
         break;
       case false:
-        statusColor = Colors.red;
+        statusColor = Theme.of(context).brightness == Brightness.light
+            ? Theme.of(context).colorScheme.error
+            : Theme.of(context).colorScheme.errorContainer;
+        textColor = Theme.of(context).brightness == Brightness.light
+            ? Theme.of(context).colorScheme.onError
+            : Theme.of(context).colorScheme.onErrorContainer;
         statusText = 'Falta';
         break;
       default:
-        statusColor = Colors.grey;
+        statusColor = Theme.of(context).brightness == Brightness.light
+            ? Theme.of(context).colorScheme.surfaceDim
+            : Theme.of(context).colorScheme.surfaceBright;
+        textColor = Theme.of(context).colorScheme.onSurfaceVariant;
         statusText = 'Sem Estado';
     }
 
@@ -53,6 +63,7 @@ class SummaryCard extends StatelessWidget {
             summary.date,
             style: TextStyle(
               fontSize: 18,
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -62,7 +73,7 @@ class SummaryCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: statusColor,
               borderRadius: BorderRadius.circular(20),
@@ -70,7 +81,7 @@ class SummaryCard extends StatelessWidget {
             child: Text(
               statusText,
               style: TextStyle(
-                color: Colors.white,
+                color: textColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
